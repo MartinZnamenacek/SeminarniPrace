@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Martin Znamenáček RP22</title>
+		<link
+			rel="shortcut icon"
+			href="https://www.freepnglogos.com/uploads/among-us-png/blue-among-us-black-hat-png-transparent-16.png"
+			type="image/png"
+		/>
+		<meta name="author" content="Martin Z." />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta charset="UTF-8" />
+		<meta name="keywords" content="HTML, CSS, JavaScript" />
+		<style type="text/css">
+			body {
+				overflow: hidden;
+				background: #0c141f;
+				height: 100vh;
+				width: 100vw;
+				font: 400 16px 'Poppins', sans-serif;
+				display: flex;
+			}
+			div {
+				width: 100%;
+				height: 100%;
+			}
+			p {
+				color: rgba(227, 230, 232, 0.8);
+				font-weight: bold;
+				font-size: 2vw;
+				line-height: 25%;
+			}
+			input[type='checkbox'] {
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				appearance: none;
+				-webkit-tap-highlight-color: transparent;
+				cursor: pointer;
+			}
+			input[type='checkbox']:focus {
+				outline: 0;
+			}
+			.packa {
+				--velikost_packy: calc(2vw);
+				height: var(--velikost_packy);
+				width: calc(var(--velikost_packy) * 1.625);
+				border-radius: calc(var(--velikost_packy) / 2);
+				display: inline-block;
+				position: absolute;
+				margin: 0;
+				border: calc(var(--velikost_packy) / 16) solid #474755;
+				background: linear-gradient(180deg, #2d2f39 0%, #1f2027 100%);
+				transition: all 0.2s ease;
+			}
+			.packa:after {
+				content: '';
+				position: absolute;
+				top: calc(var(--velikost_packy) / 16);
+				left: calc(var(--velikost_packy) / 16);
+				width: calc(var(--velikost_packy) * 3 / 4);
+				height: calc(var(--velikost_packy) * 3 / 4);
+				border-radius: 50%;
+				background: white;
+				box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
+				transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
+			}
+			.packa:checked {
+				border-color: #654fec;
+			}
+			.packa:checked:after {
+				transform: translatex(calc(var(--velikost_packy) * 5 / 8));
+			}
+			#odkaz {
+				--velikost_odkazu: calc(0.6vw);
+				display: block;
+				position: absolute;
+				right: 0px;
+				top: calc(var(--velikost_odkazu) / 10);
+				padding: var(--velikost_odkazu) var(--velikost_odkazu);
+				margin: 7px;
+				color: #fff;
+				font-size: calc(var(--velikost_odkazu) * 7 / 5);
+				font-weight: bold;
+				text-decoration: none;
+				background-color: rgba(55, 40, 40, 0.95);
+				border-radius: calc(var(--velikost_odkazu) * 2 / 5);
+				box-shadow: 0 10px 20px -5px rgba(20, 50, 64, 0.76);
+			}
+			.kolacovy-graf {
+				--procento: 0;
+				--vypln: #ff0;
+				width: 20vw;
+				height: 10vw;
+				position: relative;
+				color: #fff;
+				font-size: 22px;
+				font-weight: 600;
+				overflow: hidden;
+				color: var(--vypln);
+				display: flex;
+				align-items: flex-end;
+				justify-content: center;
+				box-sizing: border-box;
+			}
+			.kolacovy-graf:after {
+				content: '';
+				width: 20vw;
+				height: 20vw;
+				border: 5px solid;
+				border-color: rgba(255, 255, 255, 0.025) rgba(255, 255, 255, 0.025)
+					var(--vypln) var(--vypln);
+				position: absolute;
+				border-radius: 50%;
+				left: 0;
+				top: 0;
+				box-sizing: border-box;
+				transform: rotate(calc(1deg * (-45 + var(--procento) * 1.8)));
+			}
+			.tabulka {
+				display: grid;
+				grid-auto-rows: 0.33fr;
+				grid-auto-columns: 0.33fr;
+				grid-gap: 5vw 5vh;
+			}
+			.tabulka > div {
+				text-align: center;
+			}
+			.bunka1 {
+				grid-area: 1 / 1 / 2 / 2;
+			}
+			.bunka2 {
+				grid-area: 1 / 2 / 2 / 3;
+			}
+			.bunka3 {
+				grid-area: 1 / 3 / 2 / 4;
+			}
+			.bunka4 {
+				grid-area: 2 / 1 / 3 / 2;
+			}
+			.bunka5 {
+				grid-area: 2 / 2 / 3 / 3;
+			}
+			.bunka6 {
+				grid-area: 2 / 3 / 3 / 4;
+			}
+			:root {
+				--koncentrace_1: 0;
+				--koncentrace_2: 0;
+				--koncentrace_3: 0;
+				--koncentrace_4: 0;
+				--koncentrace_5: 0;
+				--koncentrace_6: 0;
+				--koncentrace_aktualizace: 43200000;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script>
+			window.onload = nacti;
+			function nacti() {
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_1.json/',
+					function (koncentrace1) {
+						document
+							.querySelector(':root')
+							.style.setProperty('--koncentrace_1', koncentrace1);
+						$('#Koncentrace_1').html(koncentrace1);
+					}
+				);
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_2.json/',
+					function (koncentrace2) {
+						document
+							.querySelector(':root')
+							.style.setProperty('--koncentrace_2', koncentrace2);
+						$('#Koncentrace_2').html(koncentrace2);
+					}
+				);
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_3.json/',
+					function (koncentrace3) {
+						document
+							.querySelector(':root')
+							.style.setProperty('--koncentrace_3', koncentrace3);
+						$('#Koncentrace_3').html(koncentrace3);
+					}
+				);
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_4.json/',
+					function (koncentrace4) {
+						document
+							.querySelector(':root')
+							.style.setProperty('--koncentrace_4', koncentrace4);
+						$('#Koncentrace_4').html(koncentrace4);
+					}
+				);
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_5.json/',
+					function (koncentrace5) {
+						document
+							.querySelector(':root')
+							.style.setProperty('--koncentrace_5', koncentrace5);
+						$('#Koncentrace_5').html(koncentrace5);
+					}
+				);
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_6.json/',
+					function (koncentrace6) {
+						document
+							.querySelector(':root')
+							.style.setProperty('--koncentrace_6', koncentrace6);
+						$('#Koncentrace_6').html(koncentrace6);
+					}
+				);
+				$.get(
+					'https://martinznamenacekdb-default-rtdb.firebaseio.com/koncentrace_aktualizace.json/',
+					function (koncentraceaktualizace) {
+						document
+							.querySelector(':root')
+							.style.setProperty(
+								'--koncentrace_aktualizace',
+								koncentraceaktualizace
+							);
+					}
+				);
+			}
+			var interval = setInterval(
+				nacti,
+				window
+					.getComputedStyle(document.querySelector(':root'))
+					.getPropertyValue('--koncentrace_aktualizace')
+			);
+			document.addEventListener('DOMContentLoaded', function () {
+				var checkbox = document.querySelector('input[type="checkbox"]');
+				checkbox.addEventListener('change', function () {
+					if (checkbox.checked) {
+						console.log('Zapnuta funkce měření');
+						nacti();
+						interval = setInterval(
+							nacti,
+							window
+								.getComputedStyle(document.querySelector(':root'))
+								.getPropertyValue('--koncentrace_aktualizace')
+						);
+					} else {
+						console.log('Vypnuta funkce měření');
+						clearInterval(interval);
+					}
+				});
+			});
+		</script>
+		<input type="checkbox" class="packa" unchecked />
+		<div class="tabulka">
+			<div class="bunka1">
+				<center>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<div
+						class="kolacovy-graf"
+						style="
+							--procento: (100 * var(--koncentrace_1) / 10000);
+							--vypln: #ef8826;
+							font-size: 2.5vw;
+						"
+					>
+						<span id="Koncentrace_1"></span>&nbsp; mg/m³
+					</div>
+				</center>
+				<p>C<sub>2</sub>H<sub>5</sub>OH</p>
+			</div>
+			<div class="bunka2">
+				<center>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<div
+						class="kolacovy-graf"
+						style="
+							--procento: (100 * var(--koncentrace_2) / 10000);
+							--vypln: #2a9ee9;
+							font-size: 2.5vw;
+						"
+					>
+						<span id="Koncentrace_2"></span>&nbsp; ppm
+					</div>
+				</center>
+				<p>CH<sub>4</sub> / C<sub>2</sub>H<sub>6</sub></p>
+			</div>
+			<div class="bunka3">
+				<center>
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
+					<div
+						class="kolacovy-graf"
+						style="
+							--procento: (100 * var(--koncentrace_3) / 10000);
+							--vypln: #949b9b;
+							font-size: 2.5vw;
+						"
+					>
+						<span id="Koncentrace_3"></span>&nbsp; ppm
+					</div>
+				</center>
+				<p>C<sub>3</sub>H<sub>8</sub> / C<sub>4</sub>H<sub>10</sub></p>
+			</div>
+			<div class="bunka4">
+				<center>
+					<p>&nbsp;</p>
+					<div
+						class="kolacovy-graf"
+						style="
+							--procento: (100 * var(--koncentrace_4) / 2000);
+							--vypln: #f50903;
+							font-size: 2.5vw;
+						"
+					>
+						<span id="Koncentrace_4"></span>&nbsp; ppm
+					</div>
+				</center>
+				<p>CO</p>
+			</div>
+			<div class="bunka5">
+				<center>
+					<p>&nbsp;</p>
+					<div
+						class="kolacovy-graf"
+						style="
+							--procento: (100 * var(--koncentrace_5) / 10000);
+							--vypln: #fc46aa;
+							font-size: 2.5vw;
+						"
+					>
+						<span id="Koncentrace_5"></span>&nbsp; ppm
+					</div>
+				</center>
+				<p>H<sub>2</sub></p>
+			</div>
+			<div class="bunka6">
+				<center>
+					<p>&nbsp;</p>
+					<div
+						class="kolacovy-graf"
+						style="
+							--procento: (100 * var(--koncentrace_6) / 200);
+							--vypln: #069921;
+							font-size: 2.5vw;
+						"
+					>
+						<span id="Koncentrace_6"></span>&nbsp; ppm
+					</div>
+				</center>
+				<p>C<sub>3</sub>H<sub>6</sub>O / C<sub>7</sub>H<sub>8</sub></p>
+			</div>
+		</div>
+		<a href="https://linktr.ee/martinznamenacek" target="_blank" id="odkaz">
+			<span> KÓD </span>
+		</a>
+	</body>
+</html>
